@@ -16,6 +16,10 @@ data,event = hd5events(filename,verbose=True)
 nevents = 100000
 
 energies = []
+
+x = data['Jets/Energy']
+
+'''
 for i in range(0,nevents):
 
     if i%1000==0:
@@ -28,6 +32,7 @@ for i in range(0,nevents):
     for e in energy:
         energies.append(e)
 
+'''
 
 
 
