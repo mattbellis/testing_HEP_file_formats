@@ -27,7 +27,7 @@ valueselectron = []
 
 for nentry in range(nentries):
 
-    if nentry%1000==0:
+    if nentry%10000==0:
         print(nentry)
 
     tree.GetEntry(nentry)
@@ -37,6 +37,7 @@ for nentry in range(nentries):
         valuesjet.append(tree.jete[i])
 
 #print(valuesjet)
+print(len(valuesjet))
 
 plt.figure()
 plt.hist(valuesjet,bins=100,range=(0,500))

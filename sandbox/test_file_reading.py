@@ -11,9 +11,20 @@ import sys
 
 filename = sys.argv[1]
 
-data,event = hd5events(filename,verbose=True)
+data,event = hd5events(filename,verbose=True,select_key_tags=['Jet'])
 
-nevents = 100000
+'''
+select_keys = event.keys()
+print(select_keys)
+mykeys = []
+for k in select_keys:
+    if 'Jet' in k:
+        mykeys.append(k)
+'''
+#exit()
+
+nevents = len(data['Jets/num'])
+print(nevents)
 
 energies = []
 
@@ -22,10 +33,10 @@ energies = []
 #'''
 for i in range(0,nevents):
 
-    if i%1000==0:
+    if i%10000==0:
         print(i)
 
-    get_event(event,data,n=i)
+    get_event(event,data,n=i)#,select_keys=mykeys)
 
     energy = event['Jets/Energy']
 
@@ -33,6 +44,8 @@ for i in range(0,nevents):
         energies.append(e)
 
 #'''
+
+print(len(energies))
 
 
 

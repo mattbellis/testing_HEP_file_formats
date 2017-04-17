@@ -6,7 +6,7 @@ import matplotlib.pylab as plt
 import time
 
 ################################################################################
-def hd5events(filename=None,verbose=False):
+def hd5events(filename=None,verbose=False,select_key_tags=None):
 
     f = None
     if filename!=None:
@@ -22,10 +22,29 @@ def hd5events(filename=None,verbose=False):
 
     for name in f:
         names.append(name)
+
         if verbose==True:
             print(f[name])
+
         for data in f[name]:
             groupname = "%s/%s" % (name,data)
+
+            ########################################################
+            # Only keep select data from file
+            ########################################################
+            keep_name = False
+            if select_key_tags is None:
+                keep_name = True
+            else:
+                for skt in select_key_tags:
+                    if skt in groupname:
+                        keep_name = True
+                        break
+
+            if keep_name==False:
+                continue
+            ########################################################
+
             ourdata[groupname] = f[groupname][:]
             event[groupname] = None # This will be filled for individual events
             if verbose==True:
@@ -51,14 +70,14 @@ def hd5events(filename=None,verbose=False):
 ################################################################################
 def get_event(event,data,n=0):
 
-    keys = data.keys()
+    keys = event.keys()
 
     for key in keys:
 
         if "num" in key:
             event[key] = data[key][n]
 
-        elif "num" not in key and "index" not in key:
+        elif "num" not in key and "index" not in key:# and 'Jets' in key:
             groupname = key.split("/")[0]
             indexkey = "%s/index" % (groupname)
             numkey = "%s/num" % (groupname)
