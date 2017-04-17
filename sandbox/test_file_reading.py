@@ -11,7 +11,8 @@ import sys
 
 filename = sys.argv[1]
 
-data,event = hd5events(filename,verbose=True,select_key_tags=['Jet'])
+#data,event = hd5events(filename,verbose=True,select_key_tags=['Jet'])
+data,event = hd5events(filename,verbose=True)
 
 '''
 select_keys = event.keys()
