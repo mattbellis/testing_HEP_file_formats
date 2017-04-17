@@ -19,12 +19,21 @@ for branch in branches:
     name = branch.GetName()
     print(name)
     data[name] = []
+    print(branch.GetTitle())
 
 nentries = tree.GetEntries()
 
 for i in range(0,nentries):
 
     tree.GetEvent(i)
+
+    x = getattr(tree,'njet')
+    print(x)
+
+    for branch in branches:
+        name = branch.GetName()
+        x = getattr(tree,name)
+        print(x)
 
     
 
