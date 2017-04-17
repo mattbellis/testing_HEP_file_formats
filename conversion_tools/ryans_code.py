@@ -18,9 +18,29 @@ def create_file(event_name):
 
     #CMS conversion, infile is directory of the CMS data file
     #HDF5 file must be empty*****
-def cms_conversion(infile_Name, hdFile):
-    file = hdFile
+def cms_conversion(infile_Name):
+
+
+    #outfile = hdFile
     #infile = open(infile_Name)
+    outfilename = infile_Name.split('.')[0]
+
+    # Compression?
+    comp_type = None; comp_opts=None; 
+    #comp_type = "gzip"; comp_opts=9; 
+    #comp_type = "lzf"; comp_opts=None; 
+    comp_tag = ""
+    if comp_type is not None:
+        comp_tag = "_comp_%s" % (comp_type)
+        if comp_opts is not None:
+            comp_tag = "%s_opts_%d" % (comp_tag,comp_opts)
+
+    outfilename = "%s%s" % (outfilename,comp_tag)
+
+    print(outfilename)
+
+    outfile = create_file(outfilename)
+
     global collisions
     print("Reading in the input file...")
     collisions = cms.get_collisions_from_filename(infile_Name)
@@ -29,11 +49,11 @@ def cms_conversion(infile_Name, hdFile):
     numColl = len(collisions)
 
     #Creates the groups for each particle type
-    jets = file.create_group("Jets")
-    muons = file.create_group("Muons")
-    electrons = file.create_group("Electrons")
-    photons = file.create_group("Photons")
-    met = file.create_group("MET")
+    jets = outfile.create_group("Jets")
+    muons = outfile.create_group("Muons")
+    electrons = outfile.create_group("Electrons")
+    photons = outfile.create_group("Photons")
+    met = outfile.create_group("MET")
 
     #Datasets for number of particles in each event
     nj = np.zeros(numColl,dtype=int)
@@ -47,10 +67,10 @@ def cms_conversion(infile_Name, hdFile):
         nm[i] = len(collisions[i][1])
         ne[i] = len(collisions[i][2])
         nph[i] = len(collisions[i][3])
-    nJets = file.create_dataset('Jets/num', data=nj) #(numColl,), dtype='i')
-    nMuons = file.create_dataset('Muons/num',data=nm) # (numColl,), dtype='i')
-    nElectrons = file.create_dataset('Electrons/num',data=ne) # (numColl,), dtype='i')
-    nPhotons = file.create_dataset('Photons/num',data=nph) # (numColl,), dtype='i')
+    nJets = outfile.create_dataset('Jets/num', data=nj,compression=comp_type, compression_opts=comp_opts)
+    nMuons = outfile.create_dataset('Muons/num',data=nm,compression=comp_type, compression_opts=comp_opts)
+    nElectrons = outfile.create_dataset('Electrons/num',data=ne,compression=comp_type, compression_opts=comp_opts)
+    nPhotons = outfile.create_dataset('Photons/num',data=nph,compression=comp_type, compression_opts=comp_opts)
     #Loads these datasets
     #for i in range(0,numColl):
         #nJets[i] = len(collisions[i][0])
@@ -63,33 +83,33 @@ def cms_conversion(infile_Name, hdFile):
     ####Loader method worked, now to load the rest of the data
     ######JETS#######
     print("Converting jets...")
-    JetEnergies = file.create_dataset('Jets/Energy', data = loader(0,0))
-    jetPx = file.create_dataset('Jets/PX', data = loader(0,1))
-    jetPy = file.create_dataset('Jets/PY', data = loader(0,2))
-    jetPy = file.create_dataset('Jets/PZ', data = loader(0,3))
-    jetBtag = file.create_dataset('Jets/bTag', data = loader(0,4))
+    JetEnergies = outfile.create_dataset('Jets/Energy', data = loader(0,0),compression=comp_type, compression_opts=comp_opts)
+    jetPx = outfile.create_dataset('Jets/PX', data = loader(0,1),compression=comp_type, compression_opts=comp_opts)
+    jetPy = outfile.create_dataset('Jets/PY', data = loader(0,2),compression=comp_type, compression_opts=comp_opts)
+    jetPy = outfile.create_dataset('Jets/PZ', data = loader(0,3),compression=comp_type, compression_opts=comp_opts)
+    jetBtag = outfile.create_dataset('Jets/bTag', data = loader(0,4),compression=comp_type, compression_opts=comp_opts)
     #####MUONS########
     print("Converting muons...")
-    MuonEnergies = file.create_dataset('Muons/Energy', data = loader(1,0))
-    MuonsPx = file.create_dataset('Muons/PX', data = loader(1,1))
-    MuonsPy = file.create_dataset('Muons/PY', data = loader(1,2))
-    MuonsPy = file.create_dataset('Muons/PZ', data = loader(1,3))
-    MuonsQ = file.create_dataset('Muons/Q', data = loader(1,4))
+    MuonEnergies = outfile.create_dataset('Muons/Energy', data = loader(1,0),compression=comp_type, compression_opts=comp_opts)
+    MuonsPx = outfile.create_dataset('Muons/PX', data = loader(1,1),compression=comp_type, compression_opts=comp_opts)
+    MuonsPy = outfile.create_dataset('Muons/PY', data = loader(1,2),compression=comp_type, compression_opts=comp_opts)
+    MuonsPy = outfile.create_dataset('Muons/PZ', data = loader(1,3),compression=comp_type, compression_opts=comp_opts)
+    MuonsQ = outfile.create_dataset('Muons/Q', data = loader(1,4),compression=comp_type, compression_opts=comp_opts)
     #####ELECTRONS####
     print("Converting electrons...")
-    ElecEnergies = file.create_dataset('Electrons/Energy', data = loader(2,0))
-    ElecPx = file.create_dataset('Electrons/PX', data = loader(2,1))
-    ElecPy = file.create_dataset('Electrons/PY', data = loader(2,2))
-    ElecPy = file.create_dataset('Electrons/PZ', data = loader(2,3))
-    ElecQ = file.create_dataset('Electrons/Q', data = loader(2,4))
+    ElecEnergies = outfile.create_dataset('Electrons/Energy', data = loader(2,0),compression=comp_type, compression_opts=comp_opts)
+    ElecPx = outfile.create_dataset('Electrons/PX', data = loader(2,1),compression=comp_type, compression_opts=comp_opts)
+    ElecPy = outfile.create_dataset('Electrons/PY', data = loader(2,2),compression=comp_type, compression_opts=comp_opts)
+    ElecPy = outfile.create_dataset('Electrons/PZ', data = loader(2,3),compression=comp_type, compression_opts=comp_opts)
+    ElecQ = outfile.create_dataset('Electrons/Q', data = loader(2,4),compression=comp_type, compression_opts=comp_opts)
     #####PHOTONS######
     print("Converting photons...")
-    PhoEnergies = file.create_dataset('Photons/Energy', data = loader(3,0))
-    PhoPx = file.create_dataset('Photons/PX', data = loader(3,1))
-    PhoPy = file.create_dataset('Photons/PY', data = loader(3,2))
-    PhoPy = file.create_dataset('Photons/PZ', data = loader(3,3))
+    PhoEnergies = outfile.create_dataset('Photons/Energy', data = loader(3,0),compression=comp_type, compression_opts=comp_opts)
+    PhoPx = outfile.create_dataset('Photons/PX', data = loader(3,1),compression=comp_type, compression_opts=comp_opts)
+    PhoPy = outfile.create_dataset('Photons/PY', data = loader(3,2),compression=comp_type, compression_opts=comp_opts)
+    PhoPy = outfile.create_dataset('Photons/PZ', data = loader(3,3),compression=comp_type, compression_opts=comp_opts)
 
-    file.close()
+    outfile.close()
 
         
 

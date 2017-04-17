@@ -4,8 +4,7 @@ import sys
 
 infile = sys.argv[1]
 
-outfilebase = infile.split('.')[0]
+#outfilebase = infile.split('.')[0]
+#hdf5out = rt.create_file(outfilebase)
 
-hdf5out = rt.create_file(outfilebase)
-
-rt.cms_conversion(infile,hdf5out)
+rt.cms_conversion(infile)
