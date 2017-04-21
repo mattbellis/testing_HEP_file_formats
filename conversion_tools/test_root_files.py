@@ -36,6 +36,9 @@ for nentry in range(nentries):
     for i in range(0,njets):
         valuesjet.append(tree.jete[i])
 
+    #x = tree.muone
+    #y = tree.electrone
+
 #print(valuesjet)
 print(len(valuesjet))
 

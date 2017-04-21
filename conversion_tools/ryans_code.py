@@ -26,8 +26,8 @@ def cms_conversion(infile_Name):
     outfilename = infile_Name.split('.')[0]
 
     # Compression?
-    comp_type = None; comp_opts=None; 
-    #comp_type = "gzip"; comp_opts=9; 
+    #comp_type = None; comp_opts=None; 
+    comp_type = "gzip"; comp_opts=9; 
     #comp_type = "lzf"; comp_opts=None; 
     comp_tag = ""
     if comp_type is not None:
