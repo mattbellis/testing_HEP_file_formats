@@ -28,7 +28,8 @@ def cms_conversion(infile_Name):
     # Compression?
     #comp_type = None; comp_opts=None; 
     #comp_type = "gzip"; comp_opts=9; 
-    comp_type = "lzf"; comp_opts=None; 
+    comp_type = "gzip"; comp_opts=9; 
+    #comp_type = "lzf"; comp_opts=None; 
     comp_tag = ""
     if comp_type is not None:
         comp_tag = "_comp_%s" % (comp_type)
