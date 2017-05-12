@@ -15,13 +15,20 @@ names = ['muon','electron','jet','photon']
 
 data = {}
 
+tree_ints = []
+tree_floats = []
+tree_arrays = []
+
 for branch in branches:
     name = branch.GetName()
-    print(name)
+    #print(name)
     data[name] = []
     print(branch.GetTitle())
 
+
 nentries = tree.GetEntries()
+
+exit()
 
 for i in range(0,nentries):
 

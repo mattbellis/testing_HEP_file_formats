@@ -6,24 +6,16 @@ import numpy as np
 import matplotlib.pylab as plt
 
 
+# Open the file and set the tree
 f = ROOT.TFile(sys.argv[1])
-
 tree = f.Get("Events")
 
-# Uncomment this if you just want to see what is stored
-# in the file.
-#print("In the file...")
-#f.ls()
-#print("In the TTree....")
-#tree.Print()
-#exit()
+tree.Print()
 
 nentries = tree.GetEntries()
 
-values = []
-valuesjet = []
-valuesmet = [[],[]]
-valueselectron = []
+# Holder for your data
+energies = []
 
 for nentry in range(nentries):
 
@@ -34,17 +26,17 @@ for nentry in range(nentries):
 
     njets = tree.njet
     for i in range(0,njets):
-        valuesjet.append(tree.jete[i])
+        energies.append(tree.jete[i])
 
     #x = tree.muone
     #y = tree.electrone
 
-#print(valuesjet)
-print(len(valuesjet))
+#print(energies)
+print(len(energies))
 
 plt.figure()
-plt.hist(valuesjet,bins=100,range=(0,500))
+plt.hist(energies,bins=100,range=(0,500))
 
-#plt.show()
+plt.show()
 
 
